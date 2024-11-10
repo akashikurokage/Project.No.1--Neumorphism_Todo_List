@@ -277,7 +277,6 @@ body{
 	justify-content: space-between;
 	cursor: default;
 	padding: 0 6px 24px 0;
-	overflow: hidden;
 }
 
 .inprogress-tasklist li span{
