@@ -31,7 +31,7 @@ PARAMETERS:
 taskItems = completedTaskItems,
 taskList = completedTasklist.
 */
-appendToTaskList(completedTaskItems, completedTasklist); 
+appendToTaskList(completedTaskItems, completedTasklist, true); 
 
 
 
@@ -75,6 +75,14 @@ function appendToTaskList(taskItems, taskList){
 
 	taskItems.forEach((task) => {
 		const taskItem = createTaskElements(task); // Get the created Elements from createTaskElements and Pass the newly created task to createTaskElements
+
+		if(isCompleted){
+			taskItem.classList.add("checked");
+			const checkedIcon = taskItem.querySelector("i");
+			checkedIcon.classList.remove("ri-checkbox-blank-circle-line");
+			checkedIcon.classList.add("ri-checkbox-circle-fill");
+		}
+		
 		taskList.appendChild(taskItem); //Appends the task in both Tasklists after creating a new task
 	});
 }
