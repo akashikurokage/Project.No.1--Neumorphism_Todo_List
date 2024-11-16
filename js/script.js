@@ -19,19 +19,10 @@ const completedTasklist = document.querySelector(".completed-tasklist");
 
 
 
-let completedTaskItems = loadCompletedTask(); //Initial empty array for updating a In Progress Tasklist
-let inProgressTasksItems = loadInProgressTask(); //Initial empty array for updating a Completed Tasklist
 
+let inProgressTasksItems = loadInProgressTask(); //Initial empty array for updating a "In Progress" Tasklist
+let completedTaskItems = loadCompletedTask(); //Initial empty array for updating a "Completed" Tasklist
 
-
-
-/* Calling the appendToTaskList function to initialized which the marked task append only to Completed Tasklist & completedTaskItems array. 
-
-PARAMETERS: 
-taskItems = completedTaskItems,
-taskList = completedTasklist.
-*/
-appendToTaskList(completedTaskItems, completedTasklist, true); 
 
 
 
@@ -42,6 +33,17 @@ taskItems = inProgressTasksItems,
 taskList = inProgressTasklist.
 */
 appendToTaskList(inProgressTasksItems, inProgressTasklist); 
+
+
+
+/* Calling the appendToTaskList function to initialized which the marked task append only to Completed Tasklist & completedTaskItems array. 
+
+PARAMETERS: 
+taskItems = completedTaskItems,
+taskList = completedTasklist.
+*/
+appendToTaskList(completedTaskItems, completedTasklist, true);
+
 
 
 
@@ -67,10 +69,8 @@ function createTaskElements(task) {
 
 
 
-
-
 // APPEND TASK ELEMENTS TO A SPECIFIED TASKLIST
-function appendToTaskList(taskItems, taskList){
+function appendToTaskList(taskItems, taskList, isCompleted = false){
 	taskList.innerHTML = ""; //Clears both  entire tasklist(In Progress & Completed Tasklist)
 
 	taskItems.forEach((task) => {
@@ -82,13 +82,9 @@ function appendToTaskList(taskItems, taskList){
 			checkedIcon.classList.remove("ri-checkbox-blank-circle-line");
 			checkedIcon.classList.add("ri-checkbox-circle-fill");
 		}
-		
 		taskList.appendChild(taskItem); //Appends the task in both Tasklists after creating a new task
 	});
 }
-
-
-
 
 
 
@@ -99,7 +95,7 @@ function addTask() {
   }
   else {
     inProgressTasksItems.push(taskInput.value.trim()); // Add the task to the "inProgressTasksItems" array
-    appendToTaskList(inProgressTasksItems, inProgressTasklist); // Calling appendTOTaskList to append new task to IN Progress tasklist
+	  appendToTaskList(inProgressTasksItems, inProgressTasklist); // Calling appendTOTaskList to append new task to IN Progress tasklist
 	  saveInProgressTask();
   }
   taskInput.value = "";
@@ -120,11 +116,11 @@ taskInput.addEventListener("keypress", (e) => {
 
 
 
-
 //HIDE THE ERROR MODAL BOX (CHECK JS LINE CODE: 62)
 errorModalBoxBtn.addEventListener("click", () => {
 	errorModalBox.classList.remove("show");
 });
+
 
 
 
@@ -149,7 +145,6 @@ function checkInprogressEmpty(){
 inProgressTasksBtn.addEventListener("click", checkInprogressEmpty); //DISPLAY INPROGRESS TASKLIST IF THE INPROGRESS BUTTON IS CLICKED
 inProgressTasklist.addEventListener("DOMSubtreeModified", checkInprogressEmpty); //CHECKS THE INPROGRESS TASKLIST CHILDREN 
 checkInprogressEmpty(); //INITIAL CALL (DISPLAYS AS DEFAULT SCREEN)
-
 
 
 
@@ -225,6 +220,7 @@ inProgressTasklist.addEventListener("click", (clicked) => {
         // 4. Now, remove the task from the In Progress Tasklist DOM
         selectTask.remove();
         checkInprogressEmpty(); 
+		  saveInProgressTask();
       }
     }
   }
@@ -279,13 +275,11 @@ completedTasklist.addEventListener("click", (clicked) => {
         // 4. Now, remove the task from the Completed Tasklist DOM
         selectTask.remove();
         checkCompletedEmpty(); 
-			saveCompletedTask();
       }
     }
   }
 	saveCompletedTask();
 });
-
 
 
 
@@ -353,7 +347,7 @@ function saveCompletedTask(){
 	localStorage.setItem("completed", saveCompleted);
 }
 
-function loadCompletedTask() {
+function loadCompletedTask(){
   const loadCompleted = localStorage.getItem("completed") || "[]";
   return JSON.parse(loadCompleted); // Assign the parsed value
 }
